@@ -2,7 +2,7 @@
 
 Name:		pydot
 Version:	0.9.10
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
@@ -41,6 +41,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/*
 
 %changelog
+* Fri Sep 15 2006 Tom "spot" Callaway <tcallawa@redhat.com> 0.9.10-4
+- bump for fc6
+
 * Thu Oct  6 2005 Tom "spot" Callaway <tcallawa@redhat.com> 0.9.10-3
 - We really do need pyparsing as a BR
 
