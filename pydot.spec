@@ -2,14 +2,14 @@
 
 Name:		pydot
 Version:	0.9.10
-Release:	4%{?dist}
+Release:	5%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
 URL:		http://dkbza.org/pydot.html
 Source0:	http://dkbza.org/data/pydot-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:	pyparsing
+BuildRequires:	pyparsing python-devel
 Requires:	graphviz, pyparsing
 BuildArch:	noarch
 
@@ -41,6 +41,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/*
 
 %changelog
+* Thu Dec 14 2006 Jason L Tibbitts III <tibbs@math.uh.edu> - 0.9.10-5
+- Rebuild for new Python
+- Add BR: python-devel
+
 * Fri Sep 15 2006 Tom "spot" Callaway <tcallawa@redhat.com> 0.9.10-4
 - bump for fc6
 
