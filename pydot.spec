@@ -2,12 +2,15 @@
 
 Name:		pydot
 Version:	1.0.2
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
 URL:		http://code.google.com/p/pydot/
 Source0:	http://pydot.googlecode.com/files/pydot-%{version}.tar.gz
+# Fix bugzilla 481540, sent upstream in Issue 23
+# http://code.google.com/p/pydot/issues/detail?id=23
+Patch0:		pydot-need-quote.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	pyparsing python-devel
 Requires:	graphviz, pyparsing
@@ -24,6 +27,7 @@ tools dot, neato, twopi.
 
 %prep
 %setup -q
+%patch0 -p1 -b .need-quote
 
 %build
 %{__python} setup.py build
@@ -44,6 +48,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/*
 
 %changelog
+* Mon Jul  6 2009 Tom "spot" Callaway <tcallawa@redhat.com> - 1.0.2-4
+- fix pydot crash with accented character (bugzilla 481540)
+
 * Thu Feb 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.2-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
