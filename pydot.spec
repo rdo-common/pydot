@@ -1,8 +1,8 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:		pydot
-Version:	1.0.2
-Release:	7%{?dist}
+Version:	1.0.3
+Release:	1%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
@@ -37,19 +37,22 @@ rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install --skip-build --root=$RPM_BUILD_ROOT
 
 # Why would you do this? :/
-rm -rf $RPM_BUILD_ROOT%{_prefix}/ChangeLog $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
+rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE ChangeLog PKG-INFO README
+%doc LICENSE PKG-INFO README
 %{python_sitelib}/dot_parser.py*
 %{python_sitelib}/pydot-*.egg-info/
 %{python_sitelib}/pydot.*
 
 %changelog
+* Wed Nov  3 2010 Tom "spot" Callaway <tcallawa@redhat.com> - 1.0.3-1
+- update to 1.0.3
+
 * Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 1.0.2-7
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 

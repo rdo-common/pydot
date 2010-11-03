@@ -1,18 +1,17 @@
-diff -up pydot-1.0.2/pydot.py.unicode pydot-1.0.2/pydot.py
---- pydot-1.0.2/pydot.py.unicode	2009-05-29 00:49:51.313446126 -0700
-+++ pydot-1.0.2/pydot.py	2009-05-29 00:50:28.002459128 -0700
-@@ -150,29 +150,17 @@ def needs_quotes( s ):
-     If the string is one of the reserved keywords it will
+diff -up pydot-1.0.3/pydot.py.BAD pydot-1.0.3/pydot.py
+--- pydot-1.0.3/pydot.py.BAD	2010-11-03 11:02:36.572752008 -0400
++++ pydot-1.0.3/pydot.py	2010-11-03 11:04:29.832752009 -0400
+@@ -153,28 +153,17 @@ def needs_quotes( s ):
      need quotes too.
      """
--        
+         
 +    # All keywords must be quoted
      if s in dot_keywords:
 -        return False
 -
 -    chars = [ord(c) for c in s if ord(c)>0x7f or ord(c)==0]
--    if chars:
--        return False
+-    if chars and not id_re_dbl_quoted.match(s):
+-        return True
 -        
 -    res = id_re_alpha_nums.match(s)
 -    if not res:
