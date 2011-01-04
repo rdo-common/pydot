@@ -1,16 +1,13 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:		pydot
-Version:	1.0.3
+Version:	1.0.4
 Release:	1%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
 URL:		http://code.google.com/p/pydot/
 Source0:	http://pydot.googlecode.com/files/pydot-%{version}.tar.gz
-# Fix bugzilla 481540, sent upstream in Issue 23
-# http://code.google.com/p/pydot/issues/detail?id=23
-Patch0:		pydot-need-quote.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	pyparsing python-devel
 Requires:	graphviz, pyparsing
@@ -27,7 +24,6 @@ tools dot, neato, twopi.
 
 %prep
 %setup -q
-%patch0 -p1 -b .need-quote
 
 %build
 %{__python} setup.py build
@@ -50,6 +46,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/pydot.*
 
 %changelog
+* Tue Jan  4 2011 Tom Callaway <spot@fedoraproject.org> - 1.0.4-1
+- update to 1.0.4
+
 * Wed Nov  3 2010 Tom "spot" Callaway <tcallawa@redhat.com> - 1.0.3-1
 - update to 1.0.3
 
