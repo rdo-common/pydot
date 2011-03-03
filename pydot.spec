@@ -1,8 +1,8 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:		pydot
-Version:	1.0.4
-Release:	2%{?dist}
+Version:	1.0.23
+Release:	1%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
@@ -46,6 +46,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/pydot.*
 
 %changelog
+* Thu Mar  3 2011 Tom Callaway <spot@fedoraproject.org> - 1.0.23-1
+- update to 1.0.23
+
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
