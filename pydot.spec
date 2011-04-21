@@ -1,7 +1,7 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:		pydot
-Version:	1.0.23
+Version:	1.0.25
 Release:	1%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
@@ -46,6 +46,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/pydot.*
 
 %changelog
+* Thu Apr 21 2011 Tom Callaway <spot@fedoraproject.org> - 1.0.25-1
+- update to 1.0.25
+
 * Thu Mar  3 2011 Tom Callaway <spot@fedoraproject.org> - 1.0.23-1
 - update to 1.0.23
 
