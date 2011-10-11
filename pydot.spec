@@ -2,13 +2,14 @@
 
 Name:		pydot
 Version:	1.0.25
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
 URL:		http://code.google.com/p/pydot/
 Source0:	http://pydot.googlecode.com/files/pydot-%{version}.tar.gz
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+# http://code.google.com/p/pydot/issues/detail?id=60
+Patch0:		pydot-fix-with-pebl.patch
 BuildRequires:	pyparsing python-devel
 Requires:	graphviz, pyparsing
 BuildArch:	noarch
@@ -24,28 +25,27 @@ tools dot, neato, twopi.
 
 %prep
 %setup -q
+%patch0 -p1 -b .peblfix
 
 %build
 %{__python} setup.py build
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install --skip-build --root=$RPM_BUILD_ROOT
 
 # Why would you do this? :/
 rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %doc LICENSE PKG-INFO README
 %{python_sitelib}/dot_parser.py*
-%{python_sitelib}/pydot-*.egg-info/
 %{python_sitelib}/pydot.*
+%{python_sitelib}/pydot-%{version}*.egg-info
 
 %changelog
+* Tue Oct 11 2011 Tom Callaway <spot@fedoraproject.org> - 1.0.25-2
+- apply fix for pebl relating to catching AttributeError, thanks to Thomas Spura
+
 * Thu Apr 21 2011 Tom Callaway <spot@fedoraproject.org> - 1.0.25-1
 - update to 1.0.25
 

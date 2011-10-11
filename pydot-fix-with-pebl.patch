@@ -1,0 +1,26 @@
+--- pydot-1.0.25/pydot.py	2011-10-09 18:07:19.345585402 +0200
++++ pydot-1.0.25/pydot.py	2011-10-09 18:08:05.764531832 +0200
+@@ -591,7 +591,10 @@
+             if default_node_name in ('subgraph', 'digraph', 'cluster'):
+                 default_node_name = 'graph'
+                 
+-            defaults = self.get_parent_graph().get_node( default_node_name )
++            try:
++            	defaults = self.get_parent_graph().get_node( default_node_name )
++            except AttributeError:
++                defaults = None
+             
+             # Multiple defaults could be set by having repeated 'graph [...]'
+             # 'node [...]', 'edge [...]' statements. In such case, if the
+@@ -605,7 +608,10 @@
+                 defaults = [defaults]
+                 
+             for default in defaults:
+-                attr_val = default.obj_dict['attributes'].get(attr, None)
++                try:
++                    attr_val = default.obj_dict['attributes'].get(attr, None)
++                except AttributeError:
++                    attr_val = None
+                 if attr_val:
+                     return attr_val
+         else:
