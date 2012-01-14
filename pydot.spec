@@ -2,7 +2,7 @@
 
 Name:		pydot
 Version:	1.0.25
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
@@ -43,6 +43,9 @@ rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
 %{python_sitelib}/pydot-%{version}*.egg-info
 
 %changelog
+* Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.25-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Tue Oct 11 2011 Tom Callaway <spot@fedoraproject.org> - 1.0.25-2
 - apply fix for pebl relating to catching AttributeError, thanks to Thomas Spura
 
