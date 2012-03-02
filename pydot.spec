@@ -1,15 +1,13 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:		pydot
-Version:	1.0.25
-Release:	3%{?dist}
+Version:	1.0.28
+Release:	1%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
 URL:		http://code.google.com/p/pydot/
 Source0:	http://pydot.googlecode.com/files/pydot-%{version}.tar.gz
-# http://code.google.com/p/pydot/issues/detail?id=60
-Patch0:		pydot-fix-with-pebl.patch
 BuildRequires:	pyparsing python-devel
 Requires:	graphviz, pyparsing
 BuildArch:	noarch
@@ -25,7 +23,6 @@ tools dot, neato, twopi.
 
 %prep
 %setup -q
-%patch0 -p1 -b .peblfix
 
 %build
 %{__python} setup.py build
@@ -43,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
 %{python_sitelib}/pydot-%{version}*.egg-info
 
 %changelog
+* Fri Mar  2 2012 Tom Callaway <spot@fedoraproject.org> - 1.0.28-1
+- update to 1.0.28
+
 * Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.25-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
