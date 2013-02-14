@@ -2,7 +2,7 @@
 
 Name:		pydot
 Version:	1.0.28
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
@@ -40,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
 %{python_sitelib}/pydot-%{version}*.egg-info
 
 %changelog
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.28-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
 * Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.28-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
