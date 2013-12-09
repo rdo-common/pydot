@@ -2,12 +2,13 @@
 
 Name:		pydot
 Version:	1.0.28
-Release:	4%{?dist}
+Release:	5%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
 URL:		http://code.google.com/p/pydot/
 Source0:	http://pydot.googlecode.com/files/pydot-%{version}.tar.gz
+Patch0:		pydot-1.0.28-pyparsing2fix.patch
 BuildRequires:	pyparsing python-devel
 Requires:	graphviz, pyparsing
 BuildArch:	noarch
@@ -23,6 +24,7 @@ tools dot, neato, twopi.
 
 %prep
 %setup -q
+%patch0 -p1 -b .pyparsing2fix
 
 %build
 %{__python} setup.py build
@@ -40,6 +42,9 @@ rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
 %{python_sitelib}/pydot-%{version}*.egg-info
 
 %changelog
+* Mon Dec  9 2013 Tom Callaway <spot@fedoraproject.org> - 1.0.28-5
+- fix for pyparsing2
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.28-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
