@@ -1,16 +1,14 @@
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-
 Name:		pydot
 Version:	1.0.28
-Release:	7%{?dist}
+Release:	8%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
 URL:		http://code.google.com/p/pydot/
 Source0:	http://pydot.googlecode.com/files/pydot-%{version}.tar.gz
 Patch0:		pydot-1.0.28-pyparsing2fix.patch
-BuildRequires:	pyparsing python-devel
-Requires:	graphviz, pyparsing
+Patch1:		pydot-1.0.28-python3.patch
+BuildRequires:	pyparsing python3-pyparsing python2-devel python3-devel
 BuildArch:	noarch
 
 %description
@@ -22,26 +20,68 @@ Output can be inlined in Postscript into interactive scientific environments
 like TeXmacs, or output in any of the format's supported by the Graphviz 
 tools dot, neato, twopi.
 
+%package -n python2-pydot
+Summary:	Python2 interface to Graphviz's Dot language
+Requires:	graphviz, pyparsing
+%{?python_provide:%python_provide python2-pydot}
+
+%description -n python2-pydot
+An interface for creating both directed and non directed graphs from Python. 
+Currently all attributes implemented in the Dot language are supported (up 
+to Graphviz 2.16).
+
+Output can be inlined in Postscript into interactive scientific environments 
+like TeXmacs, or output in any of the format's supported by the Graphviz 
+tools dot, neato, twopi.
+
+%package -n python3-pydot
+Summary:	Python3 interface to Graphviz's Dot language
+Requires:	graphviz, python3-pyparsing
+Provides:	pydot = %{version}-%{release}
+%{?python_provide:%python_provide python3-pydot}
+
+%description -n python3-pydot
+An interface for creating both directed and non directed graphs from Python. 
+Currently all attributes implemented in the Dot language are supported (up 
+to Graphviz 2.16).
+
+Output can be inlined in Postscript into interactive scientific environments 
+like TeXmacs, or output in any of the format's supported by the Graphviz 
+tools dot, neato, twopi.
+
 %prep
 %setup -q
 %patch0 -p1 -b .pyparsing2fix
+%patch1 -p1 -b .python3
 
 %build
-%{__python} setup.py build
+%py2_build
+%py3_build
 
 %install
-%{__python} setup.py install --skip-build --root=$RPM_BUILD_ROOT
+# Must do the python2 install first because the scripts in /usr/bin are
+# overwritten with every setup.py install, and in general we want the
+# python3 version to be the default.
+%py2_install
+%py3_install
 
 # Why would you do this? :/
 rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
 
-%files
-%doc LICENSE PKG-INFO README
-%{python_sitelib}/dot_parser.py*
-%{python_sitelib}/pydot.*
-%{python_sitelib}/pydot-%{version}*.egg-info
+%files -n python2-pydot
+%doc PKG-INFO README
+%license LICENSE
+%{python2_sitelib}/*
+
+%files -n python3-pydot
+%doc PKG-INFO README
+%license LICENSE
+%{python3_sitelib}/*
 
 %changelog
+* Tue Jan 19 2016 Tom Callaway <spot@fedoraproject.org> - 1.0.28-8
+- python 3 support
+
 * Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.28-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
