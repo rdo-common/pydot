@@ -1,6 +1,6 @@
 Name:		pydot
 Version:	1.0.28
-Release:	9%{?dist}
+Release:	10%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
@@ -24,6 +24,7 @@ tools dot, neato, twopi.
 Summary:	Python2 interface to Graphviz's Dot language
 Requires:	graphviz, pyparsing
 %{?python_provide:%python_provide python2-pydot}
+Obsoletes:	pydot < %{version}-%{release}
 
 %description -n python2-pydot
 An interface for creating both directed and non directed graphs from Python. 
@@ -79,6 +80,9 @@ rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
 %{python3_sitelib}/*
 
 %changelog
+* Fri Apr  8 2016 Tom Callaway <spot@fedoraproject.org> - 1.0.28-10
+- properly obsolete old "pydot" packages (bz1323980)
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.28-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
