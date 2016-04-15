@@ -1,13 +1,12 @@
 Name:		pydot
 Version:	1.0.28
-Release:	10%{?dist}
+Release:	11%{?dist}
 License:	MIT
 Group:		System Environment/Libraries
 Summary:	Python interface to Graphviz's Dot language
 URL:		http://code.google.com/p/pydot/
 Source0:	http://pydot.googlecode.com/files/pydot-%{version}.tar.gz
-Patch0:		pydot-1.0.28-pyparsing2fix.patch
-Patch1:		pydot-1.0.28-python3.patch
+Patch0:		https://anonscm.debian.org/cgit/python-modules/packages/pydot.git/plain/debian/patches/0002-support-python3.patch
 BuildRequires:	pyparsing python3-pyparsing python2-devel python3-devel
 BuildArch:	noarch
 
@@ -52,8 +51,7 @@ tools dot, neato, twopi.
 
 %prep
 %setup -q
-%patch0 -p1 -b .pyparsing2fix
-%patch1 -p1 -b .python3
+%patch0 -p1 -b .python3
 
 %build
 %py2_build
@@ -80,6 +78,9 @@ rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
 %{python3_sitelib}/*
 
 %changelog
+* Fri Apr 15 2016 Tom Callaway <spot@fedoraproject.org> - 1.0.28-11
+- use debian's python3 fix (tested against bz1312815)
+
 * Fri Apr  8 2016 Tom Callaway <spot@fedoraproject.org> - 1.0.28-10
 - properly obsolete old "pydot" packages (bz1323980)
 
