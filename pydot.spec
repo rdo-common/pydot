@@ -1,3 +1,7 @@
+%if 0%{?fedora}
+%global with_python3 1
+%endif
+
 Name:		pydot
 Version:	1.0.28
 Release:	11%{?dist}
@@ -7,7 +11,7 @@ Summary:	Python interface to Graphviz's Dot language
 URL:		http://code.google.com/p/pydot/
 Source0:	http://pydot.googlecode.com/files/pydot-%{version}.tar.gz
 Patch0:		https://anonscm.debian.org/cgit/python-modules/packages/pydot.git/plain/debian/patches/0002-support-python3.patch
-BuildRequires:	pyparsing python3-pyparsing python2-devel python3-devel
+
 BuildArch:	noarch
 
 %description
@@ -21,6 +25,7 @@ tools dot, neato, twopi.
 
 %package -n python2-pydot
 Summary:	Python2 interface to Graphviz's Dot language
+BuildRequires:	pyparsing python2-devel
 Requires:	graphviz, pyparsing
 %{?python_provide:%python_provide python2-pydot}
 Obsoletes:	pydot < %{version}-%{release}
@@ -34,8 +39,10 @@ Output can be inlined in Postscript into interactive scientific environments
 like TeXmacs, or output in any of the format's supported by the Graphviz 
 tools dot, neato, twopi.
 
+%if 0%{?with_python3}
 %package -n python3-pydot
 Summary:	Python3 interface to Graphviz's Dot language
+BuildRequires:	python3-pyparsing python3-devel
 Requires:	graphviz, python3-pyparsing
 Provides:	pydot = %{version}-%{release}
 %{?python_provide:%python_provide python3-pydot}
@@ -48,21 +55,28 @@ to Graphviz 2.16).
 Output can be inlined in Postscript into interactive scientific environments 
 like TeXmacs, or output in any of the format's supported by the Graphviz 
 tools dot, neato, twopi.
+%endif
 
 %prep
 %setup -q
+%if 0%{?with_python3}
 %patch0 -p1 -b .python3
+%endif
 
 %build
 %py2_build
+%if 0%{?with_python3}
 %py3_build
+%endif
 
 %install
 # Must do the python2 install first because the scripts in /usr/bin are
 # overwritten with every setup.py install, and in general we want the
 # python3 version to be the default.
 %py2_install
+%if 0%{?with_python3}
 %py3_install
+%endif
 
 # Why would you do this? :/
 rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
@@ -72,10 +86,12 @@ rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
 %license LICENSE
 %{python2_sitelib}/*
 
+%if 0%{?with_python3}
 %files -n python3-pydot
 %doc PKG-INFO README
 %license LICENSE
 %{python3_sitelib}/*
+%endif
 
 %changelog
 * Fri Apr 15 2016 Tom Callaway <spot@fedoraproject.org> - 1.0.28-11
