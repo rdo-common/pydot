@@ -1,83 +1,123 @@
+%if 0%{?fedora} || 0%{?rhel} >= 8
+%bcond_without python3
+%global py2pkg_suffix 2
+%else  # 0#{?fedora} || 0#{?rhel} >= 8
+%bcond_with python3
+%endif # 0#{?fedora} || 0#{?rhel} >= 8
+
+%global common_desc								\
+An interface for creating both directed and non directed graphs from Python.	\
+Currently all attributes implemented in the Dot language are supported (up	\
+to Graphviz 2.16).								\
+										\
+Output can be inlined in Postscript into interactive scientific environments	\
+like TeXmacs, or output in any of the format's supported by the Graphviz	\
+tools dot, neato, twopi.
+
+
 Name:		pydot
 Version:	1.0.28
-Release:	12%{?dist}
-License:	MIT
-Group:		System Environment/Libraries
+Release:	13%{?dist}
 Summary:	Python interface to Graphviz's Dot language
+
+License:	MIT
 URL:		http://code.google.com/p/pydot/
 Source0:	http://pydot.googlecode.com/files/pydot-%{version}.tar.gz
+
+%if %{with python3}
 Patch0:		https://anonscm.debian.org/cgit/python-modules/packages/pydot.git/plain/debian/patches/0002-support-python3.patch
-BuildRequires:	pyparsing python3-pyparsing python2-devel python3-devel
+%endif with python3
+
 BuildArch:	noarch
 
 %description
-An interface for creating both directed and non directed graphs from Python. 
-Currently all attributes implemented in the Dot language are supported (up 
-to Graphviz 2.16).
+%{common_desc}
 
-Output can be inlined in Postscript into interactive scientific environments 
-like TeXmacs, or output in any of the format's supported by the Graphviz 
-tools dot, neato, twopi.
 
 %package -n python2-pydot
 Summary:	Python2 interface to Graphviz's Dot language
-Requires:	graphviz, pyparsing
+
+BuildRequires:	pyparsing
+BuildRequires:	python%{?py2pkg_suffix}-devel
+BuildRequires:	python%{?py2pkg_suffix}-setuptools
+
+Requires:	graphviz
+Requires:	pyparsing
+
 %{?python_provide:%python_provide python2-pydot}
+
 Obsoletes:	pydot < %{version}-%{release}
 
 %description -n python2-pydot
-An interface for creating both directed and non directed graphs from Python. 
-Currently all attributes implemented in the Dot language are supported (up 
-to Graphviz 2.16).
+%{common_desc}
 
-Output can be inlined in Postscript into interactive scientific environments 
-like TeXmacs, or output in any of the format's supported by the Graphviz 
-tools dot, neato, twopi.
 
+%if %{with python3}
 %package -n python3-pydot
 Summary:	Python3 interface to Graphviz's Dot language
-Requires:	graphviz, python3-pyparsing
+
+BuildRequires:	python3-devel
+BuildRequires:	python3-pyparsing
+BuildRequires:	python3-setuptools
+
+Requires:	graphviz
+Requires:	python3-pyparsing
+
 Provides:	pydot = %{version}-%{release}
 %{?python_provide:%python_provide python3-pydot}
 
 %description -n python3-pydot
-An interface for creating both directed and non directed graphs from Python. 
-Currently all attributes implemented in the Dot language are supported (up 
-to Graphviz 2.16).
+%{common_desc}
+%endif with python3
 
-Output can be inlined in Postscript into interactive scientific environments 
-like TeXmacs, or output in any of the format's supported by the Graphviz 
-tools dot, neato, twopi.
 
 %prep
 %setup -q
+%if %{with python3}
 %patch0 -p1 -b .python3
+%endif with python3
+
 
 %build
 %py2_build
+%if %{with python3}
 %py3_build
+%endif with python3
+
 
 %install
 # Must do the python2 install first because the scripts in /usr/bin are
 # overwritten with every setup.py install, and in general we want the
 # python3 version to be the default.
 %py2_install
+%if %{with python3}
 %py3_install
+%endif with python3
 
 # Why would you do this? :/
 rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
+
 
 %files -n python2-pydot
 %doc PKG-INFO README
 %license LICENSE
 %{python2_sitelib}/*
 
+%if %{with python3}
 %files -n python3-pydot
 %doc PKG-INFO README
 %license LICENSE
 %{python3_sitelib}/*
+%endif with python3
+
 
 %changelog
+* Mon Oct 17 2016 Björn Esser <fedora@besser82.io> - 1.0.28-13
+- Drop obsolete stuff
+- Move %%description to a common macro
+- Add conditionals to build on epel
+- Clean trailing whitespaces
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.28-12
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
