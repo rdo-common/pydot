@@ -17,7 +17,7 @@ tools dot, neato, twopi.
 
 Name:		pydot
 Version:	1.0.28
-Release:	13%{?dist}
+Release:	14%{?dist}
 Summary:	Python interface to Graphviz's Dot language
 
 License:	MIT
@@ -112,6 +112,9 @@ rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
 
 
 %changelog
+* Mon Dec 19 2016 Miro Hrončok <mhroncok@redhat.com> - 1.0.28-14
+- Rebuild for Python 3.6
+
 * Mon Oct 17 2016 Björn Esser <fedora@besser82.io> - 1.0.28-13
 - Drop obsolete stuff
 - Move %%description to a common macro
