@@ -17,7 +17,7 @@ tools dot, neato, twopi.
 
 Name:		pydot
 Version:	1.0.28
-Release:	18%{?dist}
+Release:	19%{?dist}
 Summary:	Python interface to Graphviz's Dot language
 
 License:	MIT
@@ -112,6 +112,9 @@ rm -rf $RPM_BUILD_ROOT%{_prefix}/LICENSE $RPM_BUILD_ROOT%{_prefix}/README
 
 
 %changelog
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.28-19
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 1.0.28-18
 - Rebuilt for Python 3.7
 
