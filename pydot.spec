@@ -10,7 +10,7 @@ tools dot, neato, twopi.
 
 Name:		pydot
 Version:	1.2.4
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Python interface to Graphviz's Dot language
 
 License:	MIT
@@ -21,6 +21,27 @@ BuildArch:	noarch
 
 %description
 %{common_desc}
+
+
+%package -n python2-pydot
+Summary:	Python2 interface to Graphviz's Dot language
+
+BuildRequires:	python2-devel
+BuildRequires:  python2dist(chardet)
+BuildRequires:  python2dist(nose)
+BuildRequires:  python2dist(pyparsing)
+BuildRequires:  python2dist(setuptools)
+
+Requires:	graphviz
+Requires:	python2dist(pyparsing)
+
+%{?python_provide:%python_provide python2-pydot}
+
+Obsoletes:	pydot < %{version}-%{release}
+
+%description -n python2-pydot
+%{common_desc}
+
 
 %package -n python3-pydot
 Summary:	Python3 interface to Graphviz's Dot language
@@ -46,15 +67,25 @@ Provides:	pydot = %{version}-%{release}
 
 
 %build
+%py2_build
 %py3_build
 
 
 %install
+%py2_install
 %py3_install
 
 
 %check
+nosetests-%{python2_version}
 nosetests-%{python3_version}
+
+%files -n python2-pydot
+%doc ChangeLog README.md
+%license LICENSE
+%{python2_sitelib}/dot_parser.*
+%{python2_sitelib}/pydot.*
+%{python2_sitelib}/pydot-%{version}-py%{python2_version}.egg-info/
 
 %files -n python3-pydot
 %doc ChangeLog README.md
@@ -67,6 +98,9 @@ nosetests-%{python3_version}
 
 
 %changelog
+* Mon Oct 15 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 1.2.4-3
+- Bring the Python 2 subpackage back (#1637711).
+
 * Mon Oct  1 2018 Tom Callaway <spot@fedoraproject.org> - 1.2.4-2
 - just py3
 
