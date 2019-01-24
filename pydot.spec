@@ -1,3 +1,9 @@
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_python3 1
+%else
+%global with_python2 1
+%endif
+
 %global common_desc								\
 An interface for creating both directed and non directed graphs from Python.	\
 Currently all attributes implemented in the Dot language are supported (up	\
@@ -9,8 +15,8 @@ tools dot, neato, twopi.
 
 
 Name:		pydot
-Version:	1.2.4
-Release:	3%{?dist}
+Version:	1.4.1
+Release:	1%{?dist}
 Summary:	Python interface to Graphviz's Dot language
 
 License:	MIT
@@ -22,18 +28,18 @@ BuildArch:	noarch
 %description
 %{common_desc}
 
-
+%if 0%{?with_python2}
 %package -n python2-pydot
 Summary:	Python2 interface to Graphviz's Dot language
 
+BuildRequires:  graphviz
 BuildRequires:	python2-devel
-BuildRequires:  python2dist(chardet)
-BuildRequires:  python2dist(nose)
-BuildRequires:  python2dist(pyparsing)
-BuildRequires:  python2dist(setuptools)
+BuildRequires:  python2-chardet
+BuildRequires:  python2-pyparsing
+BuildRequires:  python2-setuptools
 
 Requires:	graphviz
-Requires:	python2dist(pyparsing)
+Requires:	python2-pyparsing
 
 %{?python_provide:%python_provide python2-pydot}
 
@@ -41,14 +47,15 @@ Obsoletes:	pydot < %{version}-%{release}
 
 %description -n python2-pydot
 %{common_desc}
+%endif
 
-
+%if 0%{?with_python3}
 %package -n python3-pydot
 Summary:	Python3 interface to Graphviz's Dot language
 
+BuildRequires:  graphviz
 BuildRequires:	python3-devel
 BuildRequires:  python3dist(chardet)
-BuildRequires:  python3dist(nose)
 BuildRequires:	python3dist(pyparsing)
 BuildRequires:	python3dist(setuptools)
 
@@ -60,6 +67,7 @@ Provides:	pydot = %{version}-%{release}
 
 %description -n python3-pydot
 %{common_desc}
+%endif
 
 
 %prep
@@ -67,26 +75,45 @@ Provides:	pydot = %{version}-%{release}
 
 
 %build
+%if 0%{?with_python2}
 %py2_build
+%endif
+%if 0%{?with_python3}
 %py3_build
+%endif
 
 
 %install
+%if 0%{?with_python2}
 %py2_install
+%endif
+%if 0%{?with_python3}
 %py3_install
+%endif
 
 
 %check
-nosetests-%{python2_version}
-nosetests-%{python3_version}
+pushd test
+# amoralej - workaround for https://github.com/pydot/pydot/issues/204
+rm -f graphs/multi.dot
+%if 0%{?with_python2}
+PYTHONPATH=%{buildroot}%{python2_sitelib}  %{__python2} pydot_unittest.py
+%endif
+%if 0%{?with_python3}
+PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} pydot_unittest.py
+%endif
+popd
 
+%if 0%{?with_python2}
 %files -n python2-pydot
 %doc ChangeLog README.md
 %license LICENSE
 %{python2_sitelib}/dot_parser.*
 %{python2_sitelib}/pydot.*
 %{python2_sitelib}/pydot-%{version}-py%{python2_version}.egg-info/
+%endif
 
+%if 0%{?with_python3}
 %files -n python3-pydot
 %doc ChangeLog README.md
 %license LICENSE
@@ -95,9 +122,12 @@ nosetests-%{python3_version}
 %{python3_sitelib}/__pycache__/dot_parser.*
 %{python3_sitelib}/__pycache__/pydot.*
 %{python3_sitelib}/pydot-%{version}-py%{python3_version}.egg-info/
-
+%endif
 
 %changelog
+* Thu Jan 24 2019 Alfredo Moralejo <amoralej@redhat.com> - 1.4.1-1
+* Update to 1.4.1
+
 * Mon Oct 15 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 1.2.4-3
 - Bring the Python 2 subpackage back (#1637711).
 
